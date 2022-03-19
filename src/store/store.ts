@@ -5,6 +5,8 @@ interface StoreState {
   answer: string;
   guesses: string[]
   addGuess: (guess: string) => void
+  newGame: () => void
+
 }
 export const useStore = create<StoreState>(
   persist(
@@ -15,10 +17,16 @@ export const useStore = create<StoreState>(
         set(state => ({
           guesses: [...state.guesses, guess]
         }))
+      },
+      newGame: () => {
+        set({
+          answer: getRandomWord(),
+          guesses: []
+        })
       }
     }),
     {
-      name: "food-storage", // unique name
+      name: "storage", // unique name
       getStorage: () => sessionStorage, // (optional) by default, 'localStorage' is used
     }
   ))
