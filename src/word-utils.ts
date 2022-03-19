@@ -1,9 +1,9 @@
 import wordBank from './word-bank.json'
-
 export const getRandomWord = () => {
   const randomIndex = Math.floor(Math.random() * wordBank.length)
   return wordBank[randomIndex]
 }
+const word = getRandomWord();
 
 export enum LetterState {
   Miss = 'Miss',
@@ -17,7 +17,7 @@ interface ComputeGuessPros {
 
 export function computeGuess(
   guess: string,
-  answerString: string
+  answerString: string = word
 ): LetterState[] {
   const result: LetterState[] = [];
 
@@ -31,8 +31,7 @@ export function computeGuess(
 
   const answerLetterCount: Record<string, number> = {};
 
-  // alternative approaches to this logic
-  // https://github.com/rauchg/wordledge/blob/main/pages/_middleware.ts#L46-L69
+
 
   guessAsArray.forEach((letter, index) => {
     const currentAnswerLetter = answer[index];

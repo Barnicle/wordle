@@ -7,9 +7,14 @@ const App = () => {
       <header className="border-b border-gray-500 pb-2 mb-2">
         <h1 className="text-4xl text-center">Wordle</h1>
       </header>
-      <main>
-        <WordRow letters="hell" />
-        <WordRow letters="hello"/>
+      <main className="grid grid-rows-6 gap-4">
+        <WordRow letters="hello" />
+        <WordRow letters="solar" />
+        <WordRow letters="he"/>
+        <WordRow letters="penny"/>
+        <WordRow letters="snack"/>
+        <WordRow letters="stare"/>
+
       </main>
     </div>
   )
