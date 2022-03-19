@@ -8,10 +8,11 @@ const App = () => {
   const [guess, setGuess] = useState('');
   let rows = [...state.guesses];
 
-  if (rows.length < GUESS_LENGTH) rows.push(guess)
-  const numberOfGuessesRamaining = GUESS_LENGTH - state.guesses.length;
-  rows = rows.concat(Array(numberOfGuessesRamaining).fill(''));
+  if (rows.length < GUESS_LENGTH) rows.push(guess) - 1
 
+  const guessesRemaining = GUESS_LENGTH - rows.length;
+
+  rows = rows.concat(Array(guessesRemaining).fill(''))
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newGuess = e.target.value
     if (newGuess.length === LETTER_LENGTH) {

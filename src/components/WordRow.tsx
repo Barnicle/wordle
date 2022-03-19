@@ -36,8 +36,8 @@ export default function WordRow({ letters: lettersProp = '' }: WordRowProps) {
 function CharacterBox({ value, state }: CharacterBoxProps) {
   const stateStyles = state === null ? '': LetterStateStyles[state]
   return (
-    <div className={`incline-block border-2 text-center p-4 uppercase text-2xl font-bold ${stateStyles}`}>
+    <span className={`incline-block border-2 text-center p-4 uppercase text-2xl font-bold ${stateStyles}`}>
       {value}
-    </div>
+    </span>
   )
 }
