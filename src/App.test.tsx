@@ -27,5 +27,7 @@ describe('Simple working test', () => {
     useStore.setState({ guesses: Array(6).fill('hello') })
     render(<App />);
     expect(screen.getByText('Game Over!')).toBeInTheDocument();
+    userEvent.click(screen.getByText('New Game'))
+    expect(document.querySelector('main')?.textContent).toEqual('')
   })
 })
