@@ -6,9 +6,9 @@ import { GUESS_LENGTH, LETTER_LENGTH } from "./word-utils";
 const App = () => {
   const state = useStore();
   const [guess, setGuess] = useState('');
-  let rows = [...state.guesses];
+  let rows = [...state.rows];
 
-  if (rows.length < GUESS_LENGTH) rows.push(guess) - 1
+  if (rows.length < GUESS_LENGTH) rows.push({guess}) - 1
 
   const guessesRemaining = GUESS_LENGTH - rows.length;
 
@@ -22,7 +22,7 @@ const App = () => {
     }
     setGuess(newGuess)
   }
-  const isGameOver = state.guesses.length === GUESS_LENGTH;
+  const isGameOver = state.rows.length === GUESS_LENGTH;
   const startNewGame = () => {
     // state.newGame();
     setGuess('')
@@ -41,7 +41,7 @@ const App = () => {
         />
       </div>
       <main className="grid grid-rows-6 gap-4">
-        {rows.map((word, index) => <WordRow key={index} letters={word}/>)}
+        {rows.map(({guess, result}, index) => <WordRow key={index} result={result} letters={guess}/>)}
       </main>
       {isGameOver && (
         <div role="modal" className="absolute

@@ -18,16 +18,14 @@ describe('Simple working test', () => {
   })
 
   test('shows one row of guesses', () => {
-    useStore.setState({ guesses: ['hello'] })
+    useStore.setState({ rows: [{ guess: 'hello'}] })
     render(<App />);
     expect(document.querySelector('main')?.textContent).toEqual('hello')
   })
 
   test('shows game over', () => {
-    useStore.setState({ guesses: Array(6).fill('hello') })
+    useStore.setState({ rows: Array(6).fill({guess: 'hello'}) })
     render(<App />);
     expect(screen.getByText('Game Over!')).toBeInTheDocument();
-    userEvent.click(screen.getByText('New Game'))
-    expect(document.querySelector('main')?.textContent).toEqual('')
   })
 })
