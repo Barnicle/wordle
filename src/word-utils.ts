@@ -1,9 +1,12 @@
 import wordBank from './word-bank.json'
+
+export const GUESS_LENGTH = 6;
+export const LETTER_LENGTH = 5;
+
 export const getRandomWord = () => {
   const randomIndex = Math.floor(Math.random() * wordBank.length)
   return wordBank[randomIndex]
 }
-const word = getRandomWord();
 
 export enum LetterState {
   Miss = 'Miss',
@@ -17,7 +20,7 @@ interface ComputeGuessPros {
 
 export function computeGuess(
   guess: string,
-  answerString: string = word
+  answerString: string
 ): LetterState[] {
   const result: LetterState[] = [];
 

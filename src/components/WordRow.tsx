@@ -1,8 +1,14 @@
-import { computeGuess, LetterState } from "../word-utils";
+import { useStore } from "../store/store";
+import { computeGuess, LetterState, LETTER_LENGTH } from "../word-utils";
 
-const LETTER_LENGTH = 5;
+
 interface WordRowProps {
   letters: string
+}
+
+interface CharacterBoxProps {
+  value: string,
+  state: LetterState
 }
 
 const LetterStateStyles = {
@@ -12,11 +18,12 @@ const LetterStateStyles = {
 }
 
 export default function WordRow({ letters: lettersProp = '' }: WordRowProps) {
+  const answer = useStore(state => state.answer)
   const letterRemaining = LETTER_LENGTH - lettersProp.length;
   const letters = lettersProp
     .split('')
     .concat(Array(letterRemaining).fill(''));
-  const guessState = computeGuess(lettersProp)
+  const guessState = computeGuess(lettersProp, answer)
   return (
     <div className="grid grid-cols-5 gap-4">
       {letters.map((char, index) =>
@@ -24,10 +31,7 @@ export default function WordRow({ letters: lettersProp = '' }: WordRowProps) {
     </div>
   )
 }
-interface CharacterBoxProps {
-  value: string,
-  state: LetterState
-}
+
 
 function CharacterBox({ value, state }: CharacterBoxProps) {
   const stateStyles = state === null ? '': LetterStateStyles[state]
