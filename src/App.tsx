@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
+import GameOverModal from "./components/GameOverModal";
 import Keyboard from "./components/Keybord";
 import WordRow from "./components/WordRow"
-import { useStore } from "./store/store"
-import { GUESS_LENGTH, isValidWord, LETTER_LENGTH } from "./word-utils";
+import useStore from "./store"
+import { GUESS_LENGTH, isValidWord, WORD_LENGTH } from "./word-utils";
 
 const App = () => {
   const state = useStore();
@@ -12,7 +13,7 @@ const App = () => {
   const previousGuess = usePrevious(guess);
 
   useEffect(() => {
-    let id: any;
+    let id: NodeJS.Timer;
     if (showInvalidGuess) {
       id = setTimeout(() => setInvalidGuess(false), 2000)
     }
@@ -20,7 +21,7 @@ const App = () => {
   }, [showInvalidGuess])
 
   useEffect(() => {
-    if (guess.length === 0 && previousGuess?.length === LETTER_LENGTH) {
+    if (guess.length === 0 && previousGuess?.length === WORD_LENGTH) {
       if (isValidWord(previousGuess)) {
         addGuess(previousGuess);
         setInvalidGuess(false)
@@ -39,8 +40,8 @@ const App = () => {
   const guessesRemaining = GUESS_LENGTH - rows.length;
 
   rows = rows.concat(Array(guessesRemaining).fill(''))
-
   const isGameOver = state.gameState !== 'playing';
+
   const startNewGame = () => {
     state.newGame();
     setGuess('');
@@ -59,15 +60,7 @@ const App = () => {
             letters={guess} />)}
       </main>
       <Keyboard onClick={(letter) => addGuessLetter(letter)}/>
-      {isGameOver && (
-        <div role="modal" className="absolute
-        rounded text-center bg-white border
-        left-0 right-0 top-1/4 p-6 w-3/4 mx-auto border-gray-500" >
-          Game Over!
-          <WordRow letters={state.answer}/>
-          <button onClick={startNewGame} className="block border rounder border-green-500 bg-green-500 p-2 mt-4 mx-auto">New Game</button>
-        </div>
-      )}
+      {isGameOver && <GameOverModal onClick={startNewGame} />}
     </div>
   )
 }
@@ -77,7 +70,7 @@ function useGuess(): [string, React.Dispatch<React.SetStateAction<string>>, (let
   const addGuessLetter = (letter: string) => {
     setGuess((curGuess) => {
       const newGuess =
-        letter.length === 1 && curGuess.length !== LETTER_LENGTH
+        letter.length === 1 && curGuess.length !== WORD_LENGTH
           ? curGuess + letter
           : curGuess;
 
@@ -85,16 +78,16 @@ function useGuess(): [string, React.Dispatch<React.SetStateAction<string>>, (let
         case 'Backspace':
           return newGuess.slice(0, -1);
         case 'Enter':
-          if (newGuess.length === LETTER_LENGTH) {
+          if (newGuess.length === WORD_LENGTH) {
             return '';
           }
       }
 
-      if (newGuess.length === LETTER_LENGTH) {
-        return newGuess;
+      if (newGuess.length === WORD_LENGTH) {
+        return newGuess.toUpperCase();
       }
 
-      return newGuess;
+      return newGuess.toUpperCase();
     });
   };
 

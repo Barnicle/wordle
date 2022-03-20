@@ -1,8 +1,7 @@
-import { useState } from 'react'
-import { describe, expect, it } from 'vitest'
+import { describe, expect } from 'vitest'
 import App from './App'
 import { useStore } from './store/store'
-import { render, screen, userEvent } from './test/utils'
+import { render, screen } from './test/utils'
 
 describe('Simple working test', () => {
   test('the title is visible', () => {

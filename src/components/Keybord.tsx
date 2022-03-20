@@ -1,5 +1,5 @@
 import React from "react";
-import { useStore } from "../store/store";
+import useStore from "../store";
 import { LetterState } from "../word-utils";
 
 export default function Keyboard({ onClick: onClickProp }: {

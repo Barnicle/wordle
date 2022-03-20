@@ -1,7 +1,7 @@
 import wordBank from './word-bank.json'
 
 export const GUESS_LENGTH = 6;
-export const LETTER_LENGTH = 5;
+export const WORD_LENGTH = 5;
 
 export const getRandomWord = () => {
   const randomIndex = Math.floor(Math.random() * wordBank.length)
@@ -82,5 +82,5 @@ export function computeGuess(
 }
 
 export function isValidWord(word: string): boolean {
-  return wordBank.includes(word)
+  return wordBank.includes(word.toUpperCase())
 }
