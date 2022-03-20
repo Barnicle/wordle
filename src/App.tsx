@@ -6,10 +6,11 @@ import { GUESS_LENGTH, isValidWord, LETTER_LENGTH } from "./word-utils";
 
 const App = () => {
   const state = useStore();
-  const [guess, setGuess] = useGuess();
+  const [guess, setGuess, addGuessLetter] = useGuess();
   const [showInvalidGuess, setInvalidGuess] = useState(false);
   const addGuess = useStore(s => s.addGuess);
   const previousGuess = usePrevious(guess);
+
   useEffect(() => {
     let id: any;
     if (showInvalidGuess) {
@@ -17,6 +18,7 @@ const App = () => {
     }
     return () => clearTimeout(id)
   }, [showInvalidGuess])
+
   useEffect(() => {
     if (guess.length === 0 && previousGuess?.length === LETTER_LENGTH) {
       if (isValidWord(previousGuess)) {
@@ -54,21 +56,21 @@ const App = () => {
             className={showInvalidGuess && currentRow === index ? 'animation-bounce' : ''}
             result={result}
             letters={guess} />)}
-        <Keyboard/>
+        <Keyboard onClick={(letter) => addGuessLetter(letter)}/>
       </main>
       {isGameOver && (
         <div role="modal" className="absolute
         rounded text-center bg-white border
         left-0 right-0 top-1/4 p-6 w-3/4 mx-auto border-gray-500" >
           Game Over!
-          <WordRow letters={state.answer}/>)
+          <WordRow letters={state.answer}/>
           <button onClick={startNewGame} className="block border rounder border-green-500 bg-green-500 p-2 mt-4 mx-auto">New Game</button>
         </div>
       )}
     </div>
   )
 }
-function useGuess(): [string, React.Dispatch<React.SetStateAction<string>>] {
+function useGuess(): [string, React.Dispatch<React.SetStateAction<string>>, (letter: string) => void] {
   const [guess, setGuess] = useState('');
 
   const addGuessLetter = (letter: string) => {
@@ -107,7 +109,7 @@ function useGuess(): [string, React.Dispatch<React.SetStateAction<string>>] {
     }
   })
 
-  return [guess, setGuess];
+  return [guess, setGuess, addGuessLetter];
 }
 
 function usePrevious<T>(value: T): T {
