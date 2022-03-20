@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import Keyboard from "./components/Keybord";
 import WordRow from "./components/WordRow"
 import { useStore } from "./store/store"
 import { GUESS_LENGTH, isValidWord, LETTER_LENGTH } from "./word-utils";
@@ -53,6 +54,7 @@ const App = () => {
             className={showInvalidGuess && currentRow === index ? 'animation-bounce' : ''}
             result={result}
             letters={guess} />)}
+        <Keyboard/>
       </main>
       {isGameOver && (
         <div role="modal" className="absolute
