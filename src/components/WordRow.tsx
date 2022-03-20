@@ -4,6 +4,7 @@ import { LetterState, LETTER_LENGTH } from "../word-utils";
 interface WordRowProps {
   letters: string;
   result?: LetterState[];
+  className: string
 }
 
 interface CharacterBoxProps {
@@ -19,14 +20,15 @@ const LetterStateStyles = {
 
 export default function WordRow({
   letters: lettersProp = '',
-  result = [] }: WordRowProps) {
+  result = [] }: WordRowProps,
+  className = '') {
   const letterRemaining = LETTER_LENGTH - lettersProp.length;
   const letters = lettersProp
     .split('')
     .concat(Array(letterRemaining).fill(''));
 
   return (
-    <div className="grid grid-cols-5 gap-4">
+    <div className={`grid grid-cols-5 gap-4 ${className}`}>
       {letters.map((char, index) =>
         <CharacterBox key={index} value={char}  state={result[index]} />)}
     </div>

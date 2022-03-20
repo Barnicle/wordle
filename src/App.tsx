@@ -1,14 +1,37 @@
 import React, { useEffect, useRef, useState } from "react";
 import WordRow from "./components/WordRow"
 import { useStore } from "./store/store"
-import { GUESS_LENGTH, LETTER_LENGTH } from "./word-utils";
+import { GUESS_LENGTH, isValidWord, LETTER_LENGTH } from "./word-utils";
 
 const App = () => {
   const state = useStore();
   const [guess, setGuess] = useGuess();
-  let rows = [...state.rows];
+  const [showInvalidGuess, setInvalidGuess] = useState(false);
+  const addGuess = useStore(s => s.addGuess);
+  const previousGuess = usePrevious(guess);
+  useEffect(() => {
+    let id: any;
+    if (showInvalidGuess) {
+      id = setTimeout(() => setInvalidGuess(false), 2000)
+    }
+    return () => clearTimeout(id)
+  }, [showInvalidGuess])
+  useEffect(() => {
+    if (guess.length === 0 && previousGuess?.length === LETTER_LENGTH) {
+      if (isValidWord(previousGuess)) {
+        addGuess(previousGuess);
+        setInvalidGuess(false)
+      } else {
+        setInvalidGuess(true)
+        setGuess(previousGuess);
+      }
+    }
 
-  if (rows.length < GUESS_LENGTH) rows.push({guess})
+  }, [guess])
+
+  let rows = [...state.rows];
+  let currentRow = 0;
+  if (rows.length < GUESS_LENGTH) currentRow = rows.push({ guess }) - 1;
 
   const guessesRemaining = GUESS_LENGTH - rows.length;
 
@@ -24,7 +47,12 @@ const App = () => {
         <h1 className="text-4xl text-center">Wordle</h1>
       </header>
       <main className="grid grid-rows-6 gap-4">
-        {rows.map(({guess, result}, index) => <WordRow key={index} result={result} letters={guess}/>)}
+        {rows.map(({ guess, result }, index) =>
+          <WordRow
+            key={index}
+            className={showInvalidGuess && currentRow === index ? 'animation-bounce' : ''}
+            result={result}
+            letters={guess} />)}
       </main>
       {isGameOver && (
         <div role="modal" className="absolute
@@ -39,8 +67,6 @@ const App = () => {
 }
 function useGuess(): [string, React.Dispatch<React.SetStateAction<string>>] {
   const [guess, setGuess] = useState('');
-  const addGuess = useStore(s => s.addGuess);
-  const previousGuess = usePrevious(guess);
 
   const addGuessLetter = (letter: string) => {
     setGuess((curGuess) => {
@@ -78,9 +104,6 @@ function useGuess(): [string, React.Dispatch<React.SetStateAction<string>>] {
     }
   })
 
-  useEffect(() => {
-    if (guess.length === 0 && previousGuess?.length === LETTER_LENGTH) addGuess(previousGuess);
-  }, [guess])
   return [guess, setGuess];
 }
 

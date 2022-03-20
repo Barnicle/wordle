@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { computeGuess, getRandomWord, LetterState } from './word-utils'
+import { computeGuess, getRandomWord, isValidWord, LetterState } from './word-utils'
 
 describe('getRandomWord', () => {
   it('random word', () => {
@@ -73,3 +73,12 @@ describe('computeGuess', () => {
     ]);
   });
 });
+
+describe('isValidWord', () => {
+  test('works with valid word', () => {
+    expect(isValidWord('enter')).toEqual(true)
+  })
+  test('works with invalid word', () => {
+    expect(isValidWord('foofoo')).toEqual(false)
+  })
+})
