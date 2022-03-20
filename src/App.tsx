@@ -22,9 +22,8 @@ const App = () => {
     }
     setGuess(newGuess)
   }
-  const isGameOver = state.rows.length === GUESS_LENGTH;
+  const isGameOver = state.gameState !== 'playing';
   const startNewGame = () => {
-    // state.newGame();
     setGuess('')
   }
   return (

@@ -10,7 +10,7 @@ describe('Simple working test', () => {
     expect(screen.getByText(/Wordle/i)).toBeInTheDocument();
   })
   test('shows empty state', () => {
-    useStore.getState().newGame()
+    useStore.getState().newGame([])
     render(<App />);
     expect(screen.queryByText('Game Over')).toBeNull();
     expect(document.querySelectorAll('main div')).toHaveLength(6);
@@ -18,13 +18,20 @@ describe('Simple working test', () => {
   })
 
   test('shows one row of guesses', () => {
-    useStore.setState({ rows: [{ guess: 'hello'}] })
+    useStore.getState().newGame(['hello'])
     render(<App />);
     expect(document.querySelector('main')?.textContent).toEqual('hello')
   })
 
-  test('shows game over', () => {
-    useStore.setState({ rows: Array(6).fill({guess: 'hello'}) })
+  test('shows lost game over state', () => {
+    useStore.getState().newGame(Array(2).fill('hello'))
+    const asnwer = useStore.getState().answer;
+    useStore.getState().addGuess(asnwer)
+    render(<App />);
+    expect(screen.getByText('Game Over!')).toBeInTheDocument();
+  })
+  test('can start a new game', () => {
+    useStore.getState().newGame(Array(6).fill('hello'))
     render(<App />);
     expect(screen.getByText('Game Over!')).toBeInTheDocument();
   })
