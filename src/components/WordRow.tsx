@@ -4,7 +4,7 @@ import { LetterState, LETTER_LENGTH } from "../word-utils";
 interface WordRowProps {
   letters: string;
   result?: LetterState[];
-  className: string
+  className?: string
 }
 
 interface CharacterBoxProps {

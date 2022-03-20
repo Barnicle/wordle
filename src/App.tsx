@@ -59,6 +59,7 @@ const App = () => {
         rounded text-center bg-white border
         left-0 right-0 top-1/4 p-6 w-3/4 mx-auto border-gray-500" >
           Game Over!
+          <WordRow letters={state.answer}/>)
           <button onClick={startNewGame} className="block border rounder border-green-500 bg-green-500 p-2 mt-4 mx-auto">New Game</button>
         </div>
       )}
