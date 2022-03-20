@@ -8,6 +8,7 @@ interface GuessRow {
 interface StoreState {
   answer: string;
   rows: GuessRow[];
+  keyboardLetterState: { [letter: string]: LetterState }
   addGuess: (guess: string) => void;
   gameState: 'playing' | 'won' | 'lose';
   newGame: (initialGuess?: string[]) => void;
@@ -23,9 +24,25 @@ export const useStore = create<StoreState>(
           result: computeGuess(guess, get().answer)
         }];
 
-        const computeGameState = result.every(i => i === LetterState.Match) ? 'won' : rows.length === GUESS_LENGTH ? "lose" : 'playing'
+        const keyboardLetterState = get().keyboardLetterState;
+        result.forEach((letter, index) => {
+          const resultGuessLetter = guess[index];
+          const currentLetterState = keyboardLetterState[resultGuessLetter];
+          switch (currentLetterState) {
+            case LetterState.Match: break;
+            case LetterState.Present:
+              if (letter === LetterState.Miss) break;
+            default:
+              keyboardLetterState[resultGuessLetter] = letter;
+              break;
+          }
+        })
+
+        const computeGameState = result.every(i => i === LetterState.Match) ? 'won' : rows.length === GUESS_LENGTH ? "lose" : 'playing';
+
         set(() => ({
           rows,
+          keyboardLetterState,
           gameState: computeGameState
         }))
       }
@@ -35,10 +52,12 @@ export const useStore = create<StoreState>(
         rows: [],
         gameState: 'playing',
         addGuess,
+        keyboardLetterState: {},
         newGame: (initialRows = []) => {
           set({
             answer: getRandomWord(),
             gameState: 'playing',
+            keyboardLetterState: {},
             rows: []
           });
 
@@ -47,10 +66,8 @@ export const useStore = create<StoreState>(
       }
     },
     {
-      name: "storage", // unique name
-      getStorage: () => sessionStorage, // (optional) by default, 'localStorage' is used
+      name: "storage",
+      getStorage: () => sessionStorage
     }
   )
 )
-
-  // useStore.persist.clearStorage()

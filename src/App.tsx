@@ -42,22 +42,23 @@ const App = () => {
 
   const isGameOver = state.gameState !== 'playing';
   const startNewGame = () => {
-    setGuess('')
+    state.newGame();
+    setGuess('');
   }
   return (
     <div className="mx-auto w-96 relative">
       <header className="border-b border-gray-500 pb-2 mb-2">
         <h1 className="text-4xl text-center">Wordle</h1>
       </header>
-      <main className="grid grid-rows-6 gap-4">
+      <main className="grid grid-rows-6 gap-4 mb-4">
         {rows.map(({ guess, result }, index) =>
           <WordRow
             key={index}
             className={showInvalidGuess && currentRow === index ? 'animation-bounce' : ''}
             result={result}
             letters={guess} />)}
-        <Keyboard onClick={(letter) => addGuessLetter(letter)}/>
       </main>
+      <Keyboard onClick={(letter) => addGuessLetter(letter)}/>
       {isGameOver && (
         <div role="modal" className="absolute
         rounded text-center bg-white border
