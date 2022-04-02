@@ -3,7 +3,7 @@ import { computeGuess, getRandomWord, isValidWord, LetterState } from './word-ut
 
 describe('getRandomWord', () => {
   it('random word', () => {
-    expect(getRandomWord()).toBeTruthy();
+    expect(getRandomWord()).
     expect(getRandomWord().length).toEqual(5)
   })
 })
